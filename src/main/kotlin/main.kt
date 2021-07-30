@@ -1,7 +1,10 @@
 import com.elbekD.bot.Bot
 import com.elbekD.bot.feature.chain.chain
 import com.elbekD.bot.feature.chain.terminateChain
+import com.elbekD.bot.http.await
 import com.elbekD.bot.types.BotCommand
+import kotlinx.coroutines.runBlocking
+import kotlin.concurrent.thread
 
 const val TOKEN = "1915026166:AAGDQgil7OYETNqQcMkpdve3TeUHSWNSN30"
 const val USERNAME = "CleaningQueueBot"
@@ -12,8 +15,8 @@ fun main() {
     with(bot) {
         setMyCommands(
             listOf(
-                BotCommand("/getQueue", "Get current queue"),
-                BotCommand("/setQueue", "Set new queue"),
+                BotCommand("/getqueue", "Get current queue"),
+                BotCommand("/setqueue", "Set new queue"),
                 BotCommand("/round", "Make round")
             )
         )
@@ -22,7 +25,7 @@ fun main() {
             sendMessage(msg.chat.id, "Hello! type /setQueue to set Queue")
         }
 
-        chain("/setQueue") {
+        chain("/setqueue") {
             sendMessage(
                 it.chat.id,
                 "Okay! Enter new names separated by commas or 'cancel' to cancel"
@@ -48,8 +51,8 @@ fun main() {
             } ?: sendMessage(it.chat.id, "You haven't sent names")
         }.build()
 
-        onCommand("/getQueue") { msg, _ ->
-            sendMessage(msg.chat.id, "Here's new queue: \n${Queue.namesByLines()}")
+        onCommand("/getqueue") { msg, _ ->
+            sendMessage(msg.chat.id, "Here's current queue: \n${Queue.namesByLines()}")
         }
 
         onCommand("/round") { msg, _ ->
